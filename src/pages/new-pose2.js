@@ -15,6 +15,8 @@ tfjsWasm.setWasmPaths(
 
 import * as fp from "fingerpose";
 
+import createLandmarks from "fingerpose-ext"
+
 async function setupVideo() {
   const video = document.getElementById("video");
   const stream = await window.navigator.mediaDevices.getUserMedia({
@@ -102,22 +104,24 @@ export default function HandPoseDetection() {
       ]);
       // const gesture = await GE.estimate(hands[0].landmarks, 8);
 
-      let keypoints = hands[0]?.keypoints;
-      let keypoints3D = hands[0]?.keypoints3D;
-      let landmarks = [];
+      // let keypoints = hands[0]?.keypoints;
+      // let keypoints3D = hands[0]?.keypoints3D;
+      // let landmarks = [];
 
-      for (let i = 0; i < keypoints.length; i++) {
-        // console.log("oof")
+      // for (let i = 0; i < keypoints.length; i++) {
+      //   // console.log("oof")
         
-        let currentList = [keypoints[i].x,keypoints[i].y,keypoints3D[i].z];
-        // currentList.push(keypoints3D[i].z);
-        // currentList.push(keypoints[i].y);
-        // currentList.push(keypoints[i].x);
+      //   let currentList = [keypoints[i].x,keypoints[i].y,keypoints3D[i].z];
+      //   // currentList.push(keypoints3D[i].z);
+      //   // currentList.push(keypoints[i].y);
+      //   // currentList.push(keypoints[i].x);
 
-        landmarks.push(currentList);
-      }
-      // console.log(keypoints);
-      // console.log(landmarks);
+      //   landmarks.push(currentList);
+      // }
+      // // console.log(keypoints);
+      // // console.log(landmarks);
+
+     let landmarks = createLandmarks(hands[0])
 
       const gesture = await GE.estimate(landmarks, 7);
       console.log(gesture);

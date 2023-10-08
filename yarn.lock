@@ -1208,6 +1208,11 @@ find-up@^5.0.0:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
 
+fingerpose-ext@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/fingerpose-ext/-/fingerpose-ext-1.0.3.tgz#39ef326c9d3ea88fd1442e262b764ca4514907f8"
+  integrity sha512-pDdiGOKbgSkhkavsf4f2hA0WePks4MdvXYYONFH2IKLuj8RCMMS+kLM/8pLKSz0vqCVQ2S7wZDEZ7FO51Mglew==
+
 fingerpose@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/fingerpose/-/fingerpose-0.1.0.tgz#b39af26b2fd4f01c3ad7fadf4a74dd07e34b728c"
