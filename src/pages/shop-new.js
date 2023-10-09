@@ -4,13 +4,19 @@ const Shop = dynamic(() => import("@/components/Shop"), {
   ssr: false,
 });
 
+const ListOrders = dynamic(() => import("@/components/ListOrders"), {
+  ssr: false,
+});
+
 export default function ShopPage() {
   return (
-    <div>
-      <main>
-        {/* <FaceMeshComponent></FaceMeshComponent> */}
+    <>
+      <div className="flex justify-center content-center m-20">
         <Shop></Shop>
-      </main>
-    </div>
+      </div>
+      <div>
+        {/* <ListOrders /> */}
+      </div>
+    </>
   );
 }

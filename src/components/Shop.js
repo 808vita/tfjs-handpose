@@ -22,6 +22,10 @@ import { bestMatch } from "@/custom-fingerpose/bestMatch";
 import okGesture from "@/custom-fingerpose/okGesture";
 import thumbsDown from "@/custom-fingerpose/thumbsDownGesture";
 
+import Image from "next/image";
+import catImage from "@/images/cat.jpeg";
+import ListOrders from "./ListOrders";
+
 async function setupVideo() {
   const video = document.getElementById("video");
   const stream = await window.navigator.mediaDevices.getUserMedia({
@@ -185,7 +189,7 @@ export default function Shop() {
   }, !!(detectorRef.current && detectorFaceRef.current && videoRef.current && ctx));
 
   return (
-    <div className="grid grid-cols-2 gap-2">
+    <div className="grid grid-cols-2 gap-10">
       <div>
         <canvas
           style={{
@@ -210,41 +214,46 @@ export default function Shop() {
           playsInline
         ></video>
       </div>
-      <div className="bg-zinc-200">
-        <h1 className="text-xl text-fuchsia-700">{gesture}</h1>
-        <h1 className="text-xl text-fuchsia-700">{shopStage}</h1>
-
+      <div className="flex justify-center content-center">
         {shopStage === "start" && (
           <div>
-            <h2>Welcome Cat Food Shop</h2>
-            <h2>Show "Thumbs Up" to select cat food </h2>
+            <h2 className="text-xl p-5">Cat Food Shop</h2>
+            <p>Show "Thumbs Up" to select cat food </p>
           </div>
         )}
 
         {shopStage === "checkout" && (
           <div>
-            <h2>Checkout Stage</h2>
-            <h2>Show "OK" to place an order </h2>
-            <h2>OR</h2>
-            <h2>Show "Thumbs Down" to cancel order </h2>
+            <h2 className="text-xl p-5">Checkout Stage</h2>
+            <p>Cat food in cart</p>
+            <p>Show "OK" to place an order </p>
+            <p>OR</p>
+            <p>Show "Thumbs Down" to cancel order </p>
           </div>
         )}
 
         {shopStage === "confirm" && (
           <div>
-            <h2>Order Placed</h2>
-            <h2>Thanks for placing an order</h2>
-            <h2>Shop will reset in 10 seconds</h2>
+            <h2 className="text-xl p-5">Order Placed</h2>
+            <p>Thanks for placing an order.</p>
+            <p>Shop will reset in 10 seconds.</p>
           </div>
         )}
 
         {shopStage === "cancelled" && (
           <div>
-            <h2>Order Cancelled</h2>
-            <h2>show zoned cat gif</h2>
+            <h2 className="text-xl p-5">Order Cancelled</h2>
+            <Image src={catImage} alt="oof" />
             <h2>oof,shop will reset in 10 seconds</h2>
           </div>
         )}
+      </div>
+      <div>
+        <h1 className="text-xl text-fuchsia-700">{gesture}</h1>
+        <h1 className="text-xl text-fuchsia-700">{shopStage}</h1>
+      </div>
+      <div>
+        <ListOrders />
       </div>
     </div>
   );
