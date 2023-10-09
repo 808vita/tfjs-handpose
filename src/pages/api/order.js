@@ -11,17 +11,13 @@ export default function handler(req, res) {
   // }
 
   if (req.method === "GET") {
-
-
     // return res.status(200).json({
     //   msg: "oof get",
     // });
 
-    getOrders(req,res);
-
-
+    return getOrders(req, res);
   } else if (req.method === "POST") {
-    addOrder(req, res);
+    return addOrder(req, res);
 
     // const jsonContent = req.body;
     // return res.status(201).json({
