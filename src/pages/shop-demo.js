@@ -4,7 +4,7 @@ import {
   SupportedModels,
 } from "@tensorflow-models/hand-pose-detection";
 import "@tensorflow/tfjs-backend-webgl";
-import { drawHands } from "@/utils/new-utils";
+import { drawHands ,drawFaces} from "@/utils/new-utils";
 
 import { useAnimationFrame } from "@/hooks/useAnimationFrame";
 import * as tfjsWasm from "@tensorflow/tfjs-backend-wasm";
@@ -12,6 +12,9 @@ import * as tfjsWasm from "@tensorflow/tfjs-backend-wasm";
 tfjsWasm.setWasmPaths(
   `https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm`
 );
+import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
+import * as faceMesh from '@mediapipe/face_mesh';
+
 
 import * as fp from "fingerpose";
 
@@ -51,6 +54,19 @@ async function setupDetector() {
   return detector;
 }
 
+async function setupFaceDetector() {
+  const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
+  const detector = await faceLandmarksDetection.createDetector(model, {
+      runtime: 'mediapipe',
+      solutionPath: `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@${faceMesh.VERSION}`,
+      maxFaces: 2,
+      refineLandmarks: true
+  });
+
+  return detector;
+}
+
+
 async function setupCanvas(video) {
   const canvas = document.getElementById("canvas");
   const ctx = canvas.getContext("2d");
@@ -63,14 +79,17 @@ async function setupCanvas(video) {
 
 export default function HandPoseDetection() {
   const detectorRef = useRef();
+  const detectorFaceRef = useRef();
   const videoRef = useRef();
   const [ctx, setCtx] = useState();
+  const contours = faceLandmarksDetection.util.getKeypointIndexByContour(faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh);
 
   useEffect(() => {
     async function initialize() {
       videoRef.current = await setupVideo();
       const ctx = await setupCanvas(videoRef.current);
       detectorRef.current = await setupDetector();
+      detectorFaceRef.current = await setupFaceDetector();
 
       setCtx(ctx);
     }
@@ -82,7 +101,8 @@ export default function HandPoseDetection() {
     const hands = await detectorRef.current.estimateHands(video, {
       flipHorizontal: false,
     });
-
+    const faces = await detectorFaceRef.current.estimateFaces(videoRef.current);
+    
     ctx.clearRect(
       0,
       0,
@@ -107,43 +127,24 @@ export default function HandPoseDetection() {
         okGesture,
         thumbsDown,
       ]);
-      // const gesture = await GE.estimate(hands[0].landmarks, 8);
-
-      // let keypoints = hands[0]?.keypoints;
-      // let keypoints3D = hands[0]?.keypoints3D;
-      // let landmarks = [];
-
-      // for (let i = 0; i < keypoints.length; i++) {
-      //   // console.log("oof")
-
-      //   let currentList = [keypoints[i].x,keypoints[i].y,keypoints3D[i].z];
-      //   // currentList.push(keypoints3D[i].z);
-      //   // currentList.push(keypoints[i].y);
-      //   // currentList.push(keypoints[i].x);
-
-      //   landmarks.push(currentList);
-      // }
-      // // console.log(keypoints);
-      // // console.log(landmarks);
+    
 
       let landmarks = createLandmarks(hands[0]);
 
-      const gesture = await GE.estimate(landmarks, 7);
+      const gesture = await GE.estimate(landmarks, 6);
 
       console.log(gesture);
       if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
         console.log(gesture.gestures);
         console.log(bestMatch(gesture.gestures));
-        // console.log(gesture.gestures[maxConfidence].name);
-        // console.log(emoji);
-        // setEmoji(gesture.gestures[maxConfidence].name);
-        // console.log(emoji);
+
       }
       //
     }
 
     drawHands(hands, ctx);
-  }, !!(detectorRef.current && videoRef.current && ctx));
+    drawFaces(faces, ctx, contours);
+  }, !!(detectorRef.current && detectorFaceRef.current && videoRef.current && ctx));
 
   return (
     <div>

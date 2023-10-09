@@ -107,37 +107,17 @@ export default function HandPoseDetection() {
         okGesture,
         thumbsDown,
       ]);
-      // const gesture = await GE.estimate(hands[0].landmarks, 8);
-
-      // let keypoints = hands[0]?.keypoints;
-      // let keypoints3D = hands[0]?.keypoints3D;
-      // let landmarks = [];
-
-      // for (let i = 0; i < keypoints.length; i++) {
-      //   // console.log("oof")
-
-      //   let currentList = [keypoints[i].x,keypoints[i].y,keypoints3D[i].z];
-      //   // currentList.push(keypoints3D[i].z);
-      //   // currentList.push(keypoints[i].y);
-      //   // currentList.push(keypoints[i].x);
-
-      //   landmarks.push(currentList);
-      // }
-      // // console.log(keypoints);
-      // // console.log(landmarks);
+    
 
       let landmarks = createLandmarks(hands[0]);
 
-      const gesture = await GE.estimate(landmarks, 7);
+      const gesture = await GE.estimate(landmarks, 6);
 
       console.log(gesture);
       if (gesture.gestures !== undefined && gesture.gestures.length > 0) {
         console.log(gesture.gestures);
         console.log(bestMatch(gesture.gestures));
-        // console.log(gesture.gestures[maxConfidence].name);
-        // console.log(emoji);
-        // setEmoji(gesture.gestures[maxConfidence].name);
-        // console.log(emoji);
+
       }
       //
     }
