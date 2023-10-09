@@ -25,6 +25,7 @@ import thumbsDown from "@/custom-fingerpose/thumbsDownGesture";
 import Image from "next/image";
 import catImage from "@/images/cat.jpeg";
 import ListOrders from "./ListOrders";
+import { postOrderStatus } from "@/utils/fetchApiCall";
 
 async function setupVideo() {
   const video = document.getElementById("video");
@@ -166,7 +167,7 @@ export default function Shop() {
                 console.log("oof");
                 setShopStage(() => "start");
               }, 10000);
-
+              postOrderStatus("confirmed");
               return "confirm";
             } else if (prev === "checkout" && getGesture === "thumbs_down") {
               const resetShop = setTimeout(() => {
@@ -174,6 +175,7 @@ export default function Shop() {
                 console.log("oof");
                 setShopStage(() => "start");
               }, 10000);
+              postOrderStatus("cancelled");
 
               return "cancelled";
             }

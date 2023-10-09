@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
 const getOrdersList = async () => {
   try {
@@ -37,7 +38,26 @@ const ListOrders = () => {
     return () => clearInterval(interval);
   }, []);
 
-  return <div>oof</div>;
+  return (
+    <div>
+      <h2>Live Orders</h2>
+      {ordersData?.order &&
+        ordersData?.order.map((item) => (
+          <div key={item?._id} className="p-5">
+            <p className="pb-1">{`Status: ${item?.status}`}</p>
+            <p className="pb-1">
+              Placed Order:{" "}
+              {formatDistanceToNow(new Date(item?.createdAt), {
+                addSuffix: true,
+              })}
+            </p>
+            <p className="pb-1">{`Order id: ${item?._id}`}</p>
+
+            <p className=""> {`Timestamp: ${item?.createdAt}`}</p>
+          </div>
+        ))}
+    </div>
+  );
 };
 
 export default ListOrders;

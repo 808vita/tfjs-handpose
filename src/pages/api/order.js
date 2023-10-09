@@ -1,25 +1,33 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
+import { addOrder, getOrders } from "@/apiHandler/apiHandler";
+
 export default function handler(req, res) {
-//   res.status(200).json({ name: "John Doe" });
+  //   res.status(200).json({ name: "John Doe" });
 
-
-
-//  {
-//     "order_status":"confirmed",
-//     "timestamp":"timestamp"
-// }
+  //  {
+  //     "order_status":"confirmed",
+  //     "timestamp":"timestamp"
+  // }
 
   if (req.method === "GET") {
-    return res.status(200).json({
-      msg: "oof get",
-    });
+
+
+    // return res.status(200).json({
+    //   msg: "oof get",
+    // });
+
+    getOrders(req,res);
+
+
   } else if (req.method === "POST") {
-    const jsonContent = req.body;
-    return res.status(201).json({
-      msg: "oof post",
-      oof:jsonContent
-    });
+    addOrder(req, res);
+
+    // const jsonContent = req.body;
+    // return res.status(201).json({
+    //   msg: "oof post",
+    //   oof:jsonContent
+    // });
   } else {
     return res.status(400).json({
       msg: "only get / post requests",
